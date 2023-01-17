@@ -39,7 +39,6 @@ class PipelineForm extends FormRequest
             return [
                 'name' => 'required',
                 'stages.*.name' => 'unique_key',
-                'stages.*.code' => 'unique_key',
             ];
         }
 
@@ -47,7 +46,6 @@ class PipelineForm extends FormRequest
             'name'        => 'required',
             'rotten_days' => 'required',
             'stages.*.name' => 'unique_key',
-            'stages.*.code' => 'unique_key',
         ];
     }
 
