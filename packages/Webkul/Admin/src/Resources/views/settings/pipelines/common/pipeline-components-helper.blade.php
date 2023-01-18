@@ -32,7 +32,7 @@
 
                     .toLowerCase()
 
-                    .replace(/[^\w\u0621-\u064A\u4e00-\u9fa5\u3402-\uFA6D\u3041-\u30A0\u30A0-\u31FF- ]+/g, '')
+                    //.replace(/[^\w\u0621-\u064A\u4e00-\u9fa5\u3402-\uFA6D\u3041-\u30A0\u30A0-\u31FF- ]+/g, '')
 
                     // replace whitespaces with dashes
                     .replace(/ +/g, '-')
