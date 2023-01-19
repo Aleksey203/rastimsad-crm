@@ -162,7 +162,7 @@
             'delete-success'           => 'Лид успешно удалён.',
             'delete-failed'            => 'Лид не может быть удалён.',
             'note'                     => 'Комментарий',
-            'activity'                 => 'Активность',
+            'activity'                 => 'Связаться',
             'title-control'            => 'Название',
             'call'                     => 'Звонок',
             'meeting'                  => 'Meeting',

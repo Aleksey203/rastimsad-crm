@@ -13,7 +13,7 @@ return [
         'route'      => 'admin.leads.index',
         'sort'       => 2,
         'icon-class' => 'leads-icon',
-    ], [
+    ]/*, [
         'key'        => 'quotes',
         'name'       => 'admin::app.layouts.quotes',
         'route'      => 'admin.quotes.index',
@@ -62,7 +62,7 @@ return [
         'route'      => 'admin.mail.index',
         'params'     => ['route' => 'trash'],
         'sort'       => 5,
-    ]
+    ]*/
     // , [
     //     'key'        => 'mail.setting',
     //     'name'       => 'admin::app.layouts.mail.setting',
@@ -71,16 +71,10 @@ return [
     //     'sort'       => 5,
     // ]
     , [
-        'key'        => 'activities',
-        'name'       => 'admin::app.layouts.activities',
-        'route'      => 'admin.activities.index',
-        'sort'       => 5,
-        'icon-class' => 'activities-icon',
-    ], [
         'key'        => 'contacts',
         'name'       => 'admin::app.layouts.contacts',
         'route'      => 'admin.contacts.persons.index',
-        'sort'       => 6,
+        'sort'       => 3,
         'icon-class' => 'phone-icon',
     ], [
         'key'        => 'contacts.persons',
@@ -93,12 +87,18 @@ return [
         'route'      => 'admin.contacts.organizations.index',
         'sort'       => 2,
     ], [
+        'key'        => 'activities',
+        'name'       => 'admin::app.layouts.activities',
+        'route'      => 'admin.activities.index',
+        'sort'       => 5,
+        'icon-class' => 'activities-icon',
+    ], /*[
         'key'        => 'products',
         'name'       => 'admin::app.layouts.products',
         'route'      => 'admin.products.index',
         'sort'       => 7,
         'icon-class' => 'products-icon',
-    ], [
+    ], */[
         'key'        => 'settings',
         'name'       => 'admin::app.layouts.settings',
         'route'      => 'admin.settings.index',

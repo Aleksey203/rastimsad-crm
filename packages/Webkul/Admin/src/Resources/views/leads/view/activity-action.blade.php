@@ -225,7 +225,7 @@
             {!! view_render_event('admin.leads.view.informations.activity_actions.activity.after', ['lead' => $lead]) !!}
 
 
-            {!! view_render_event('admin.leads.view.informations.activity_actions.email.before', ['lead' => $lead]) !!}
+            {{--{!! view_render_event('admin.leads.view.informations.activity_actions.email.before', ['lead' => $lead]) !!}
 
             @if (bouncer()->hasPermission('mail.compose'))
                 <tab name="{{ __('admin::app.leads.email') }}">
@@ -338,7 +338,7 @@
                 </tab>
             @endif
 
-            {!! view_render_event('admin.leads.view.informations.activity_actions.email.after', ['lead' => $lead]) !!}
+            {!! view_render_event('admin.leads.view.informations.activity_actions.email.after', ['lead' => $lead]) !!}--}}
 
 
             {!! view_render_event('admin.leads.view.informations.activity_actions.file.before', ['lead' => $lead]) !!}
@@ -397,7 +397,7 @@
             {!! view_render_event('admin.leads.view.informations.activity_actions.file.after', ['lead' => $lead]) !!}
 
 
-            {!! view_render_event('admin.leads.view.informations.activity_actions.quote.before', ['lead' => $lead]) !!}
+            {{--{!! view_render_event('admin.leads.view.informations.activity_actions.quote.before', ['lead' => $lead]) !!}
 
             @if (bouncer()->hasPermission('quotes.create'))
                 <tab name="{{ __('admin::app.leads.quote') }}">
@@ -407,7 +407,7 @@
                 </tab>
             @endif
 
-            {!! view_render_event('admin.leads.view.informations.activity_actions.quote.after', ['lead' => $lead]) !!}
+            {!! view_render_event('admin.leads.view.informations.activity_actions.quote.after', ['lead' => $lead]) !!}--}}
         </tabs>
     </script>
 
@@ -450,7 +450,7 @@
 
             mounted: function() {
                 var self = this;
-                
+
                 tinymce.init({
                     selector: 'textarea#reply',
 

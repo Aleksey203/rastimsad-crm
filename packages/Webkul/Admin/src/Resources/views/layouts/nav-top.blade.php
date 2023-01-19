@@ -36,7 +36,7 @@
                             </div>
                         @endif
 
-                        @if (bouncer()->hasPermission('quotes.create'))
+                        {{--@if (bouncer()->hasPermission('quotes.create'))
                             <div class="quick-link-item">
                                 <a href="{{ route('admin.quotes.create') }}">
                                     <i class="icon quotation-icon"></i>
@@ -54,7 +54,7 @@
                                     <span>{{ __('admin::app.layouts.email') }}</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif--}}
 
                         @if (bouncer()->hasPermission('contacts.persons.create'))
                             <div class="quick-link-item">
@@ -76,7 +76,7 @@
                             </div>
                         @endif
 
-                        @if (bouncer()->hasPermission('products.create'))
+                        {{--@if (bouncer()->hasPermission('products.create'))
                             <div class="quick-link-item">
                                 <a href="{{ route('admin.products.create') }}">
                                     <i class="icon product-icon"></i>
@@ -114,7 +114,7 @@
                                     <span>{{ __('admin::app.layouts.user') }}</span>
                                 </a>
                             </div>
-                        @endif
+                        @endif--}}
                     </div>
 
                 </div>

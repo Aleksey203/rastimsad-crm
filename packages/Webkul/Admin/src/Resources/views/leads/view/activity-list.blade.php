@@ -41,7 +41,7 @@
                                 <span v-if="activity.type == 'note'">
                                     {{ __('admin::app.leads.note-added') }}
                                 </span>
-                                
+
                                 <span v-else-if="activity.type == 'call'">
                                     @{{ '{!! __('admin::app.leads.call-scheduled') !!}'.replace(':from', formatDate(activity.schedule_from)).replace(':to', formatDate(activity.schedule_to)) }}
                                 </span>
@@ -53,7 +53,7 @@
                                 <span v-else-if="activity.type == 'lunch'">
                                     @{{ '{!! __('admin::app.leads.lunch-scheduled') !!}'.replace(':from', formatDate(activity.schedule_from)).replace(':to', formatDate(activity.schedule_to)) }}
                                 </span>
-                                
+
                                 <span v-else-if="activity.type == 'file'">
                                     {{ __('admin::app.leads.file-added') }}
                                 </span>
@@ -103,7 +103,7 @@
 
                                 <a :href="'{{ route('admin.settings.users.edit') }}/' + activity.user.id" target="_blank">
                                     @{{ activity.user.name }}
-                                </a> 
+                                </a>
                             </div>
                         </template>
 
@@ -155,14 +155,14 @@
 
                         <span v-else>{{ __('admin::app.leads.empty-done-activities') }}</span>
                     </div>
-                    
+
                 </div>
             </tab>
 
             {!! view_render_event('admin.leads.view.informations.activity_list.general.after', ['lead' => $lead]) !!}
 
 
-            {!! view_render_event('admin.leads.view.informations.activity_list.quotes.before', ['lead' => $lead]) !!}
+            {{--{!! view_render_event('admin.leads.view.informations.activity_list.quotes.before', ['lead' => $lead]) !!}
 
             @if (bouncer()->hasPermission('quotes'))
                 <tab name="{{ __('admin::app.leads.quote') }}">
@@ -203,13 +203,13 @@
                                     <th class="actions" style="width: 40px;"></th>
                                 </tr>
                             </thead>
-                            
+
                             <tbody>
                                 <tr v-for="quote in quotes">
                                     <td class="quote-subject">@{{ quote.subject }}</td>
 
                                     <td class="expired-at">@{{ quote.expired_at }}</td>
-                                    
+
                                     <td class="sub-total">@{{ quote.sub_total }}</td>
 
                                     <td class="discount">@{{ quote.discount_amount }}</td>
@@ -241,7 +241,7 @@
                                                             </a>
                                                         </li>
                                                     @endif
-                                                    
+
                                                     @if (bouncer()->hasPermission('quotes.delete'))
                                                         <li @click="removeQuote(quote)">
                                                             {{ __('admin::app.leads.remove') }}
@@ -264,7 +264,7 @@
                 </tab>
             @endif
 
-            {!! view_render_event('admin.leads.view.informations.activity_list.quotes.after', ['lead' => $lead]) !!}
+            {!! view_render_event('admin.leads.view.informations.activity_list.quotes.after', ['lead' => $lead]) !!}--}}
         </tabs>
     </script>
 
@@ -272,14 +272,14 @@
         Vue.component('activity-list-component', {
 
             template: '#activity-list-component-template',
-    
+
             inject: ['$validator'],
 
             data: function () {
                 return {
                     activities: @json(app('\Webkul\Lead\Repositories\LeadRepository')->getAllActivities($lead->id)),
 
-                    types: ['all', 'note', 'call', 'meeting', 'lunch', 'file', 'email'],
+                    types: ['all', 'note', 'call', 'meeting', 'lunch', 'file'/*, 'email'*/],
 
                     typeLabels: {
                         'all': "{{ __('admin::app.leads.all') }}",
@@ -287,7 +287,7 @@
                         'note': "{{ __('admin::app.leads.notes') }}",
 
                         'call': "{{ __('admin::app.leads.calls') }}",
-                        
+
                         'meeting': "{{ __('admin::app.leads.meetings') }}",
 
                         'lunch': "{{ __('admin::app.leads.lunches') }}",
@@ -376,7 +376,7 @@
                             const index = self.activities.indexOf(activity);
 
                             Vue.delete(self.activities, index);
-                            
+
                             window.flashMessages = [{'type': 'success', 'message': response.data.message}];
 
                             self.$root.addFlashMessages();
@@ -392,7 +392,7 @@
                     }
 
                     this.$root.pageLoaded = false;
-                    
+
                     var self = this;
 
                     this.$http.delete("{{ route('admin.leads.quotes.delete', $lead->id) }}/" + quote['id'])
@@ -402,7 +402,7 @@
                             const index = self.quotes.indexOf(quote);
 
                             Vue.delete(self.quotes, index);
-                            
+
                             window.flashMessages = [{'type': 'success', 'message': response.data.message}];
 
                             self.$root.addFlashMessages();
