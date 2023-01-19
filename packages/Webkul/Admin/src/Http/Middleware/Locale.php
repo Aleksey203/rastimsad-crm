@@ -2,6 +2,7 @@
 
 namespace Webkul\Admin\Http\Middleware;
 
+use Barryvdh\Debugbar\Facades\Debugbar;
 use Closure;
 use Illuminate\Http\Request;
 use Illuminate\Foundation\Application;
@@ -31,6 +32,12 @@ class Locale
             core()->getConfigData('general.locale_settings.locale')
                 ?: app()->getLocale()
         );
+        if (auth()->user() && auth()->id() === 1) {
+            Debugbar::enable();
+        }
+        else {
+            Debugbar::disable();
+        }
 
         return $next($request);
     }
