@@ -50,7 +50,7 @@
                 </span>
             </div>
 
-            <div class="form-group email">
+            <div class="form-group contact-emails">
                 <label for="person[emails]">{{ __('admin::app.leads.email') }}</label>
 
                 @include('admin::common.custom-attributes.edit.email', ['formScope' => $formScope ?? ''])

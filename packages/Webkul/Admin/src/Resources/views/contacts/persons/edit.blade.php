@@ -37,18 +37,18 @@
 
                             {!! view_render_event('admin.contacts.persons.edit.form_buttons.after', ['person' => $person]) !!}
                         </div>
-        
+
                         <div class="panel-body">
                             {!! view_render_event('admin.contacts.persons.edit.form_controls.before', ['person' => $person]) !!}
 
                             @csrf()
-                            
+
                             <input name="_method" type="hidden" value="PUT">
-                
+
                             @include('admin::common.custom-attributes.edit', [
                                 'customAttributes' => app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
                                     'entity_type' => 'persons',
-                                ]),
+                                ])->sortBy('sort_order'),
                                 'entity'           => $person,
                             ])
 
