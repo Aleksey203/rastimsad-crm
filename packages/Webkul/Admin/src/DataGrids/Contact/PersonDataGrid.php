@@ -40,16 +40,18 @@ class PersonDataGrid extends DataGrid
             ->addSelect(
                 'persons.id',
                 'persons.name as person_name',
-                'persons.emails',
+                'persons.vk',
+                'persons.telegram',
                 'persons.contact_numbers',
                 'organizations.name as organization',
-                'organizations.id as organization_id'
+                'organizations.id as organization_id',
+                'organizations.name as organization_name'
             )
             ->leftJoin('organizations', 'persons.organization_id', '=', 'organizations.id');
 
         $this->addFilter('id', 'persons.id');
         $this->addFilter('person_name', 'persons.name');
-        $this->addFilter('organization', 'organizations.id');
+        $this->addFilter('organization', 'organizations.name');
 
         $this->setQueryBuilder($queryBuilder);
     }
@@ -61,21 +63,21 @@ class PersonDataGrid extends DataGrid
      */
     public function addColumns()
     {
-        $this->addColumn([
+        /*$this->addColumn([
             'index'      => 'id',
             'label'      => trans('admin::app.datagrid.id'),
             'type'       => 'string',
             'sortable'   => true,
-        ]);
+        ]);*/
 
         $this->addColumn([
             'index'    => 'person_name',
-            'label'    => trans('admin::app.datagrid.name'),
+            'label'    => 'Имя',
             'type'     => 'string',
             'sortable' => true,
         ]);
 
-        $this->addColumn([
+        /*$this->addColumn([
             'index'    => 'emails',
             'label'    => trans('admin::app.datagrid.emails'),
             'type'     => 'string',
@@ -87,27 +89,47 @@ class PersonDataGrid extends DataGrid
                     return collect($emails)->pluck('value')->join(', ');
                 }
             },
-        ]);
+        ]);*/
 
         $this->addColumn([
             'index'    => 'contact_numbers',
-            'label'    => trans('admin::app.datagrid.contact_numbers'),
+            'label'    => 'Телефоны',
             'type'     => 'string',
             'sortable' => false,
             'closure'  => function ($row) {
                 $contactNumbers = json_decode($row->contact_numbers, true);
 
                 if ($contactNumbers) {
-                    return collect($contactNumbers)->pluck('value')->join(', ');
+                    return collect($contactNumbers)->pluck('value')->transform(function ($item, $key) {
+                        return '<a href="tel:+' . $item . '">+' . $item . '</a>';
+                    })->join(' , ');
                 }
             },
         ]);
 
         $this->addColumn([
+            'index'            => 'vk',
+            'label'            => 'VK',
+            'type'             => 'string',
+            'sortable'         => false,
+            'closure'  => function ($row) {
+                return "<a href='" . $row->vk . "' target='_blank'>" . $row->vk . "</a>";
+            },
+        ]);
+        $this->addColumn([
+            'index'            => 'telegram',
+            'label'            => 'Telegram',
+            'type'             => 'string',
+            'sortable'         => false,
+            'closure'  => function ($row) {
+                return "<a href='" . $row->telegram . "' target='_blank'>" . $row->telegram . "</a>";
+            },
+        ]);
+        $this->addColumn([
             'index'            => 'organization',
-            'label'            => trans('admin::app.datagrid.organization_name'),
-            'type'             => 'dropdown',
-            'dropdown_options' => $this->getOrganizationDropdownOptions(),
+            'label'            => 'Организация',
+            'type'             => 'string',
+            //'dropdown_options' => $this->getOrganizationDropdownOptions(),
             'sortable'         => false,
             'closure'  => function ($row) {
                 return "<a href='" . route('admin.contacts.organizations.edit', $row->organization_id) . "' target='_blank'>" . $row->organization . "</a>";
