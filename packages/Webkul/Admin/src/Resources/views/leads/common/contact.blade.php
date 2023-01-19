@@ -1,7 +1,7 @@
 @push('scripts')
     <script type="text/x-template" id="contact-component-template">
         <div class="contact-controls">
-            
+
             <div class="form-group" :class="[errors.has('{!! $formScope ?? '' !!}person[name]') ? 'has-error' : '']">
                 <label for="person[name]" class="required">{{ __('admin::app.leads.name') }}</label>
 
@@ -40,7 +40,7 @@
                         <li class="action" v-if="person['name'].length && ! is_searching" @click="addAsNew()">
                             <span>
                                 + {{ __('admin::app.common.add-as') }}
-                            </span> 
+                            </span>
                         </li>
                     </ul>
                 </div>
@@ -51,14 +51,14 @@
             </div>
 
             <div class="form-group email">
-                <label for="person[emails]" class="required">{{ __('admin::app.leads.email') }}</label>
+                <label for="person[emails]">{{ __('admin::app.leads.email') }}</label>
 
                 @include('admin::common.custom-attributes.edit.email', ['formScope' => $formScope ?? ''])
-                    
+
                 <email-component
                     :attribute="{'code': 'person[emails]', 'name': 'Email'}"
                     :data="person.emails"
-                    validations="required|email"
+                    validations="email"
                 ></email-component>
             </div>
 
@@ -66,7 +66,7 @@
                 <label for="person[contact_numbers]">{{ __('admin::app.leads.contact-numbers') }}</label>
 
                 @include('admin::common.custom-attributes.edit.phone', ['formScope' => $formScope ?? ''])
-                    
+
                 <phone-component
                     :attribute="{'code': 'person[contact_numbers]', 'name': 'Contact Numbers'}"
                     :data="person.contact_numbers"
@@ -99,7 +99,7 @@
         Vue.component('contact-component', {
 
             template: '#contact-component-template',
-    
+
             props: ['data'],
 
             inject: ['$validator'],
@@ -137,7 +137,7 @@
                     }
 
                     var self = this;
-                    
+
                     this.$http.get("{{ route('admin.contacts.persons.search') }}", {params: {query: this.person['name']}})
                         .then (function(response) {
                             self.persons = response.data;
