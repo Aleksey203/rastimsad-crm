@@ -25,12 +25,12 @@
                         :data-vv-as="attribute['name']"
                     >
 
-                    <div class="input-group-append">
+<!--                    <div class="input-group-append">
                         <select :name="attribute['code'] + '[' + index + '][label]'" class="control" v-model="email['label']">
                             <option value="work">{{ __('admin::app.common.work') }}</option>
                             <option value="home">{{ __('admin::app.common.home') }}</option>
                         </select>
-                    </div>
+                    </div>-->
 
                     <i class="icon trash-icon" v-if="emails.length > 1" @click="removeEmail(email)"></i>
 
@@ -45,27 +45,27 @@
 
         <script>
             Vue.component('email-component', {
-    
+
                 template: '#email-component-template',
-    
+
                 props: ['validations', 'attribute', 'data'],
-    
+
                 inject: ['$validator'],
-    
+
                 data: function () {
                     return {
                         emails: this.data,
                     }
                 },
 
-                watch: { 
+                watch: {
                     data: function(newVal, oldVal) {
                         if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                             this.emails = newVal || [{'value': '', 'label': 'work'}];
                         }
                     }
                 },
-    
+
                 created: function() {
                     this.extendValidator();
 
@@ -76,7 +76,7 @@
                         }];
                     }
                 },
-    
+
                 methods: {
                     addEmail: function() {
                         this.emails.push({
@@ -84,10 +84,10 @@
                             'label': 'work'
                         })
                     },
-    
+
                     removeEmail: function(email) {
                         const index = this.emails.indexOf(email);
-    
+
                         Vue.delete(this.emails, index);
                     },
 

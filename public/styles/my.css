@@ -1,0 +1,30 @@
+.panel .panel-body {
+    display: flex;
+    flex-wrap: wrap;
+}
+.emails-control {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.emails-control .form-group.input-group{
+    width: calc(50% - 20px);
+}
+.emails-control .add-more-link{
+    width: 100%;
+}
+.phone-control {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.phone-control .form-group.input-group{
+    width: calc(50% - 20px);
+}
+.phone-control .add-more-link{
+    width: 100%;
+}
+
+.form-group.text,  .form-group.lookup{
+    width: calc(50% - 20px);
+}

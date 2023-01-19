@@ -26,7 +26,7 @@
                         :data-vv-as="attribute['name']"
                     />
 
-                    <div class="input-group-append">
+<!--                    <div class="input-group-append">
                         <select
                             :name="attribute['code'] + '[' + index + '][label]'"
                             class="control"
@@ -35,7 +35,7 @@
                             <option value="work">{{ __('admin::app.common.work') }}</option>
                             <option value="home">{{ __('admin::app.common.home') }}</option>
                         </select>
-                    </div>
+                    </div>-->
 
                     <i class="icon trash-icon" v-if="contactNumbers.length > 1" @click="removePhone(contactNumber)"></i>
 
@@ -63,7 +63,7 @@
                     }
                 },
 
-                watch: { 
+                watch: {
                     data: function(newVal, oldVal) {
                         if (JSON.stringify(newVal) !== JSON.stringify(oldVal)) {
                             this.contactNumbers = newVal || [{'value': '', 'label': 'work'}];

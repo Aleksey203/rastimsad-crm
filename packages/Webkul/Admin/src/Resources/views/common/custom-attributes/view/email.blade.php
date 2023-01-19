@@ -4,12 +4,12 @@
         <span class="multi-value">
             {{ $item['value'] }}
 
-            <span>{{ ' (' . $item['label'] . ')'}}</span>
+<!--            <span>{{--{{ ' (' . $item['label'] . ')'}}--}}</span>-->
         </span>
     @endforeach
 
 @else
 
     {{ __('admin::app.common.not-available') }}
-    
+
 @endif
