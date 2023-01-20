@@ -14,6 +14,7 @@ class LeadDataGrid extends DataGrid
 {
     use ProvideDropdownOptions;
 
+    protected $enableSearch = false;
     /**
      * Pipeline repository instance.
      *
@@ -113,16 +114,23 @@ class LeadDataGrid extends DataGrid
                 'users.name as sales_person',
                 'persons.id as person_id',
                 'persons.name as person_name',
+                'organizations.name as organization_name',
                 'tags.name as tag_name',
                 'lead_pipelines.rotten_days as pipeline_rotten_days',
                 'lead_pipeline_stages.code as stage_code',
-                DB::raw('CASE WHEN DATEDIFF(NOW(),' . DB::getTablePrefix() . 'leads.created_at) >=' . DB::getTablePrefix() . 'lead_pipelines.rotten_days THEN 1 ELSE 0 END as rotten_lead'),
+                DB::raw('CASE WHEN DATEDIFF(NOW(),' . DB::getTablePrefix() . 'leads.created_at) >=' .
+                    DB::getTablePrefix() . 'lead_pipelines.rotten_days THEN 1 ELSE 0 END as rotten_lead'),
             )
             ->leftJoin('users', 'leads.user_id', '=', 'users.id')
             ->leftJoin('persons', 'leads.person_id', '=', 'persons.id')
+            ->leftJoin('organizations', 'organizations.id', '=', 'persons.organization_id')
             ->leftJoin('lead_types', 'leads.lead_type_id', '=', 'lead_types.id')
-            ->leftJoin('lead_pipeline_stages', 'leads.lead_pipeline_stage_id', '=', 'lead_pipeline_stages.id')
-            ->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
+            ->leftJoin(
+                'lead_pipeline_stages',
+                'leads.lead_pipeline_stage_id',
+                '=',
+                'lead_pipeline_stages.id'
+            )->leftJoin('lead_sources', 'leads.lead_source_id', '=', 'lead_sources.id')
             ->leftJoin('lead_pipelines', 'leads.lead_pipeline_id', '=', 'lead_pipelines.id')
             ->leftJoin('lead_tags', 'leads.id', '=', 'lead_tags.lead_id')
             ->leftJoin('tags', 'tags.id', '=', 'lead_tags.tag_id')
@@ -140,7 +148,8 @@ class LeadDataGrid extends DataGrid
         }
 
         if (! is_null(request()->input('rotten_lead.in'))) {
-            $queryBuilder->havingRaw(DB::getTablePrefix() . 'rotten_lead = ' . request()->input('rotten_lead.in'));
+            $queryBuilder->havingRaw(DB::getTablePrefix() . 'rotten_lead = ' .
+                request()->input('rotten_lead.in'));
         }
 
         $this->addFilter('id', 'leads.id');
@@ -153,7 +162,8 @@ class LeadDataGrid extends DataGrid
         $this->addFilter('tag_name', 'tags.name');
         $this->addFilter('expected_close_date', 'leads.expected_close_date');
         $this->addFilter('created_at', 'leads.created_at');
-        $this->addFilter('rotten_lead',  DB::raw('DATEDIFF(NOW(), ' . DB::getTablePrefix() . 'leads.created_at) >= ' . DB::getTablePrefix() . 'lead_pipelines.rotten_days'));
+        $this->addFilter('rotten_lead',  DB::raw('DATEDIFF(NOW(), ' . DB::getTablePrefix() .
+            'leads.created_at) >= ' . DB::getTablePrefix() . 'lead_pipelines.rotten_days'));
 
         $this->setQueryBuilder($queryBuilder);
     }
@@ -165,7 +175,7 @@ class LeadDataGrid extends DataGrid
      */
     public function addColumns()
     {
-        $this->addColumn([
+        /*$this->addColumn([
             'index'    => 'id',
             'label'    => trans('admin::app.datagrid.id'),
             'type'     => 'string',
@@ -184,44 +194,30 @@ class LeadDataGrid extends DataGrid
 
                 return "<a href='" . $route . "'>" . $row->sales_person . "</a>";
             },
-        ]);
+        ]);*/
 
         $this->addColumn([
             'index'    => 'title',
-            'label'    => trans('admin::app.datagrid.subject'),
-            'type'     => 'string',
-            'sortable' => true,
-        ]);
-
-        $this->addColumn([
-            'index'    => 'tag_name',
-            'label'    => trans('admin::app.datagrid.tags'),
-            'type'     => 'hidden',
-            'sortable' => true,
-        ]);
-
-        $this->addColumn([
-            'index'            => 'lead_source_name',
-            'label'            => trans('admin::app.leads.lead-source-name'),
-            'type'             => 'dropdown',
-            'dropdown_options' => $this->getleadSourcesOptions(),
-            'searchable'       => false,
-            'sortable'         => true,
-        ]);
-
-        $this->addColumn([
-            'index'    => 'lead_value',
-            'label'    => trans('admin::app.datagrid.lead_value'),
+            'label'    => 'Организация',
             'type'     => 'string',
             'sortable' => true,
             'closure'  => function ($row) {
-                return core()->formatBasePrice($row->lead_value, 2);
+                $route = urldecode(
+                    route('admin.contacts.organizations.index', ['name[eq]' => $row->organization_name])
+                );
+                if ($row->title) {
+                    if ($row->organization_name) {
+                        return "<a href='" . $route . "'>" . $row->title . "</a>";
+                    }
+                    return $row->title;
+                }
+                return "<a href='" . $route . "'>" . $row->organization_name . "</a>";
             },
         ]);
 
         $this->addColumn([
             'index'      => 'person_name',
-            'label'      => trans('admin::app.datagrid.contact_person'),
+            'label'      => 'Контакт',
             'type'       => 'string',
             'searchable' => false,
             'sortable'   => false,
@@ -229,6 +225,16 @@ class LeadDataGrid extends DataGrid
                 $route = urldecode(route('admin.contacts.persons.index', ['id[eq]' => $row->person_id]));
 
                 return "<a href='" . $route . "'>" . $row->person_name . "</a>";
+            },
+        ]);
+
+        $this->addColumn([
+            'index'    => 'lead_value',
+            'label'    => 'Товаров',
+            'type'     => 'string',
+            'sortable' => true,
+            'closure'  => function ($row) {
+                return (int)$row->lead_value;
             },
         ]);
 
@@ -253,32 +259,49 @@ class LeadDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
-            'index'             => 'rotten_lead',
-            'label'             => trans('admin::app.datagrid.rotten_lead'),
-            'type'              => 'single_dropdown',
-            'dropdown_options'  => $this->getYesNoDropdownOptions(),
-            'sortable'          => true,
-            'searchable'        => false,
-            'condition'         => 'eq',
-            'closure'           => function ($row) {
-                return ! $row->rotten_lead || in_array($row->stage_code, ['won', 'lost']) ? trans('admin::app.common.no') : trans('admin::app.common.yes');
-            }
+            'index'    => 'tag_name',
+            'label'    => trans('admin::app.datagrid.tags'),
+            'type'     => 'hidden',
+            'sortable' => true,
         ]);
 
         $this->addColumn([
-            'index'      => 'expected_close_date',
-            'label'      => trans('admin::app.datagrid.expected_close_date'),
-            'type'       => 'date_range',
-            'searchable' => false,
-            'sortable'   => true,
-            'closure'    => function ($row) {
-                if (! $row->expected_close_date) {
-                    return '--';
-                }
-
-                return core()->formatDate($row->expected_close_date);
-            },
+            'index'            => 'lead_source_name',
+            'label'            => trans('admin::app.leads.lead-source-name'),
+            'type'             => 'dropdown',
+            'dropdown_options' => $this->getleadSourcesOptions(),
+            'searchable'       => false,
+            'sortable'         => true,
         ]);
+        /*
+                $this->addColumn([
+                    'index'             => 'rotten_lead',
+                    'label'             => trans('admin::app.datagrid.rotten_lead'),
+                    'type'              => 'single_dropdown',
+                    'dropdown_options'  => $this->getYesNoDropdownOptions(),
+                    'sortable'          => true,
+                    'searchable'        => false,
+                    'condition'         => 'eq',
+                    'closure'           => function ($row) {
+                        return ! $row->rotten_lead || in_array($row->stage_code, ['won', 'lost']) ?
+         trans('admin::app.cmon.no') : trans('admin::app.common.yes');
+                    }
+                ]);
+
+                /*$this->addColumn([
+                    'index'      => 'expected_close_date',
+                    'label'      => trans('admin::app.datagrid.expected_close_date'),
+                    'type'       => 'date_range',
+                    'searchable' => false,
+                    'sortable'   => true,
+                    'closure'    => function ($row) {
+                        if (! $row->expected_close_date) {
+                            return '--';
+                        }
+
+                        return core()->formatDate($row->expected_close_date);
+                    },
+                ]);*/
 
         $this->addColumn([
             'index'      => 'created_at',
@@ -287,7 +310,7 @@ class LeadDataGrid extends DataGrid
             'searchable' => false,
             'sortable'   => true,
             'closure'    => function ($row) {
-                return core()->formatDate($row->created_at);
+                return core()->formatDate($row->created_at, 'd.m.Y');
             },
         ]);
     }
@@ -335,7 +358,10 @@ class LeadDataGrid extends DataGrid
             'title'        => trans('ui::app.datagrid.delete'),
             'method'       => 'DELETE',
             'route'        => 'admin.leads.delete',
-            'confirm_text' => trans('ui::app.datagrid.massaction.delete', ['resource' => trans('admin::app.contacts.persons.person')]),
+            'confirm_text' => trans(
+                'ui::app.datagrid.massaction.delete',
+                ['resource' => trans('admin::app.contacts.persons.person')]
+            ),
             'icon'         => 'trash-icon',
         ]);
     }

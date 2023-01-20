@@ -19,7 +19,7 @@
     </style>
 @endpush
 
-<div class="content full-page">
+<div class="content full-page kanban">
     <div class="table">
         <div class="table-header">
             <h1>
@@ -101,7 +101,7 @@
                 :class="{ 'rotten': lead.rotten_days > 0 ? true : false }"
             >
 
-                <div class="lead-title">@{{ lead.title }}</div>
+                <div class="lead-title">@{{ lead.title ? lead.title : lead.organization_name }}</div>
 
                 <div class="icons">
                     <a :href="'{{ route('admin.leads.view') }}/' + lead.id" class="icon eye-icon"></a>

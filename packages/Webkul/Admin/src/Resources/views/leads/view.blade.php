@@ -11,7 +11,7 @@
         }
 
         .modal-container .modal-body {
-            padding: 0;
+            padding: 0 20px;
         }
 
         .content-container .content .page-header {
@@ -251,7 +251,32 @@
 
                     <input name="_method" type="hidden" value="PUT">
                     <input type="hidden" id="lead_pipeline_stage_id" name="lead_pipeline_stage_id" value="{{ $lead->lead_pipeline_stage_id }}" />
-                    <tabs>
+                    <div class="panel-body">
+                        {!! view_render_event('admin.contacts.organizations.create.form_controls.before') !!}
+
+                        @csrf()
+
+                        @include('admin::leads.common.contact-in-lead')
+                        <contact-component :data='@json(old('person') ?: $lead->person)'></contact-component>
+
+                        @include('admin::common.custom-attributes.edit', [
+                                'customAttributes'  => app('Webkul\Attribute\Repositories\AttributeRepository')
+                                ->findWhere([
+                                    'entity_type' => 'leads',
+                                    'quick_add'   => 1
+                                ])->sortBy('sort_order'),
+                                'customValidations' => [
+                                    'expected_close_date' => [
+                                        'date_format:yyyy-MM-dd',
+                                        'after:' .  \Carbon\Carbon::yesterday()->format('Y-m-d')
+                                    ],
+                                ],
+                                'entity'            => $lead,
+                            ])
+
+                        {!! view_render_event('admin.contacts.organizations.edit.form_controls.after') !!}
+                    </div>
+                    {{--<tabs>
                         {!! view_render_event('admin.leads.view.edit.form_controls.details.before', ['lead' => $lead]) !!}
 
                         <tab name="{{ __('admin::app.leads.details') }}" :selected="true">
@@ -292,7 +317,7 @@
                         </tab>
 
                         {!! view_render_event('admin.leads.view.edit.form_controls.products.after', ['lead' => $lead]) !!}
-                    </tabs>
+                    </tabs>--}}
 
                     {!! view_render_event('admin.leads.view.edit.form_controls.after', ['lead' => $lead]) !!}
                 </div>

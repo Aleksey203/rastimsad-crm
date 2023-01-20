@@ -19,7 +19,10 @@
 
         {!! view_render_event('admin.leads.create.header.after') !!}
 
-        <form method="POST" action="{{ route('admin.leads.store') }}" @submit.prevent="onSubmit" enctype="multipart/form-data">
+        <form method="POST"
+              action="{{ route('admin.leads.store') }}"
+              @submit.prevent="onSubmit"
+              enctype="multipart/form-data">
 
             <div class="page-content">
                 <div class="form-container">
@@ -36,22 +39,51 @@
 
                             {!! view_render_event('admin.leads.create.form_buttons.after') !!}
                         </div>
-        
+
                         {!! view_render_event('admin.leads.create.form_controls.before') !!}
 
                         @csrf()
-                        
-                        <input type="hidden" id="lead_pipeline_stage_id" name="lead_pipeline_stage_id" value="{{ request('stage_id') }}" />
 
-                        <tabs>
+                        <input type="hidden"
+                               id="lead_pipeline_stage_id"
+                               name="lead_pipeline_stage_id"
+                               value="{{ request('stage_id') }}" />
+
+                        <div class="panel-body">
+                            {!! view_render_event('admin.contacts.organizations.create.form_controls.before') !!}
+
+                            @csrf()
+
+                            @include('admin::leads.common.contact-in-lead')
+                            <contact-component :data='@json(old('person'))'></contact-component>
+
+                            @include('admin::common.custom-attributes.edit', [
+                                    'customAttributes'  => app('Webkul\Attribute\Repositories\AttributeRepository')
+                                    ->findWhere([
+                                        'entity_type' => 'leads',
+                                        'quick_add'   => 1
+                                    ])->sortBy('sort_order'),
+                                    'customValidations' => [
+                                        'expected_close_date' => [
+                                            'date_format:yyyy-MM-dd',
+                                            'after:' .  \Carbon\Carbon::yesterday()->format('Y-m-d')
+                                        ],
+                                    ],
+                                ])
+
+                            {!! view_render_event('admin.contacts.organizations.edit.form_controls.after') !!}
+                        </div>
+
+                        {{--<tabs>
                             {!! view_render_event('admin.leads.create.form_controls.details.before') !!}
 
                             <tab name="{{ __('admin::app.leads.details') }}" :selected="true">
                                 @include('admin::common.custom-attributes.edit', [
-                                    'customAttributes'  => app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
+                                    'customAttributes'  => app('Webkul\Attribute\Repositories\AttributeRepository')
+                                    ->findWhere([
                                         'entity_type' => 'leads',
                                         'quick_add'   => 1
-                                    ]),
+                                    ])->sortBy('sort_order'),
                                     'customValidations' => [
                                         'expected_close_date' => [
                                             'date_format:yyyy-MM-dd',
@@ -75,7 +107,7 @@
                             {!! view_render_event('admin.leads.create.form_controls.contact_person.after') !!}
 
 
-                            {!! view_render_event('admin.leads.create.form_controls.products.before') !!} 
+                            {!! view_render_event('admin.leads.create.form_controls.products.before') !!}
 
                             <tab name="{{ __('admin::app.leads.products') }}">
                                 @include('admin::leads.common.products')
@@ -84,7 +116,7 @@
                             </tab>
 
                             {!! view_render_event('admin.leads.create.form_controls.products.after') !!}
-                        </tabs>
+                        </tabs>--}}
 
                         {!! view_render_event('admin.leads.create.form_controls.after') !!}
 

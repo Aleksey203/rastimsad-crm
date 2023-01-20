@@ -24,7 +24,7 @@ Breadcrumbs::for('leads.create', function (BreadcrumbTrail $trail) {
 // Dashboard > Leads > Title
 Breadcrumbs::for('leads.view', function (BreadcrumbTrail $trail, $lead) {
     $trail->parent('leads');
-    $trail->push($lead->title, route('admin.leads.view', $lead->id));
+    $trail->push($lead->person->name, route('admin.leads.view', $lead->id));
 });
 
 

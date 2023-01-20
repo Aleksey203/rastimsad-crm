@@ -1,15 +1,12 @@
-.panel .panel-body {
+.panel-body {
     display: flex;
     flex-wrap: wrap;
+    justify-content: space-between;
 }
 .emails-control {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-}
-.emails-control .form-group.input-group{
-    /*width: calc(50% - 20px);
-    padding-right: 20px;*/
 }
 .emails-control .add-more-link{
     width: 100%;
@@ -19,15 +16,25 @@
     flex-wrap: wrap;
     justify-content: space-between;
 }
-.phone-control .form-group.input-group{
-    /*width: calc(50% - 20px);
-    padding-right: 20px;*/
-}
 .phone-control .add-more-link{
     width: 100%;
 }
 
 .form-group.text, .form-group.lookup, .form-group.phone, .form-group.email{
     width: calc(50% - 20px);
-    padding-right: 20px;
+}
+
+.form-group.price, .form-group.select, .form-group.date{
+    width: calc(100%/3 - 20px);
+}
+
+.currency-code {
+    display: none;
+}
+
+.kanban .table {
+    height: calc(100% + 10px);
+}
+.kanban .search-filter {
+    visibility: hidden;
 }

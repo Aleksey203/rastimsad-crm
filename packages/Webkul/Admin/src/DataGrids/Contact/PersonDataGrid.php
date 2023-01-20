@@ -63,12 +63,12 @@ class PersonDataGrid extends DataGrid
      */
     public function addColumns()
     {
-        /*$this->addColumn([
+        $this->addColumn([
             'index'      => 'id',
             'label'      => trans('admin::app.datagrid.id'),
-            'type'       => 'string',
+            'type'       => 'hidden',
             'sortable'   => true,
-        ]);*/
+        ]);
 
         $this->addColumn([
             'index'    => 'person_name',

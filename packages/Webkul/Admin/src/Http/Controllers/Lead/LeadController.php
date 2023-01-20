@@ -3,6 +3,7 @@
 namespace Webkul\Admin\Http\Controllers\Lead;
 
 use Carbon\Carbon;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Event;
 use Webkul\Admin\Http\Controllers\Controller;
 use Webkul\Admin\Http\Requests\LeadForm;
@@ -122,7 +123,7 @@ class LeadController extends Controller
 
                     foreach ($paginator as $lead) {
                         $data[$stageId]['leads'][] =  array_merge($lead->toArray(), [
-                            'lead_value' => core()->formatBasePrice($lead->lead_value),
+                            'lead_value' => (int)$lead->lead_value,
                         ]);
                     }
                 } else {
@@ -138,12 +139,12 @@ class LeadController extends Controller
                                 'last' => $last = $paginator->lastPage(),
                                 'next' => $current < $last ? $current + 1 : null,
                             ],
-                            'total' => core()->formatBasePrice($query->paginate(10)->sum('lead_value')),
+                            'total' => (int)($query->paginate(10)->sum('lead_value')),
                         ];
 
                         foreach ($paginator as $lead) {
                             $data[$stage->id]['leads'][] =  array_merge($lead->toArray(), [
-                                'lead_value' => core()->formatBasePrice($lead->lead_value),
+                                'lead_value' => (int)$lead->lead_value,
                             ]);
                         }
                     }
@@ -177,6 +178,10 @@ class LeadController extends Controller
         $data = request()->all();
 
         $data['status'] = 1;
+
+        if (!isset($data['user_id'])) {
+            $data['user_id'] = Auth::id();
+        }
 
         if ($data['lead_pipeline_stage_id']) {
             $stage = $this->stageRepository->findOrFail($data['lead_pipeline_stage_id']);
@@ -259,8 +264,11 @@ class LeadController extends Controller
 
             $data['lead_pipeline_stage_id'] = $stage->id;
         }
+        if (is_null($data['title'])) {
+            $data['title'] = '';
+        }
 
-        $lead = $this->leadRepository->update($data, $id);        
+        $lead = $this->leadRepository->update($data, $id);
 
         Event::dispatch('lead.update.after', $lead);
 
@@ -288,24 +296,24 @@ class LeadController extends Controller
     {
         $currentUser = auth()->guard('user')->user();
 
-        if ($currentUser->view_permission == 'global') {            
+        if ($currentUser->view_permission == 'global') {
             $results = $this->leadRepository->findWhere([
                 ['title', 'like', '%' . urldecode(request()->input('query')) . '%'],
             ]);
-        } elseif ($currentUser->view_permission == 'individual') {            
+        } elseif ($currentUser->view_permission == 'individual') {
             $results = $this->leadRepository->findWhere([
                 ['title', 'like', '%' . urldecode(request()->input('query')) . '%'],
                 ['user_id', '=', $currentUser->id],
             ]);
         } elseif ($currentUser->view_permission == 'group') {
             $userIds = app('\Webkul\User\Repositories\UserRepository')->getCurrentUserGroupsUserIds();
-            
+
             $results = $this->leadRepository->findWhere([
                 ['title', 'like', '%' . urldecode(request()->input('query')) . '%'],
                 ['user_id', 'IN', $userIds],
             ]);
         }
-        
+
         return response()->json($results);
     }
 

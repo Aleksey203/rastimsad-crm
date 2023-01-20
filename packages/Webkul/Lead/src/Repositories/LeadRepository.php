@@ -98,6 +98,7 @@ class LeadRepository extends Repository
                     'title',
                     'lead_value',
                     'persons.name as person_name',
+                    'organizations.name as organization_name',
                     'leads.person_id as person_id',
                     'lead_pipelines.id as lead_pipeline_id',
                     'lead_pipeline_stages.name as status',
@@ -105,9 +106,10 @@ class LeadRepository extends Repository
                 )
                 ->addSelect(\DB::raw('DATEDIFF(leads.created_at + INTERVAL lead_pipelines.rotten_days DAY, now()) as rotten_days'))
                 ->leftJoin('persons', 'leads.person_id', '=', 'persons.id')
+                ->leftJoin('organizations', 'organizations.id', '=', 'persons.organization_id')
                 ->leftJoin('lead_pipelines', 'leads.lead_pipeline_id', '=', 'lead_pipelines.id')
                 ->leftJoin('lead_pipeline_stages', 'leads.lead_pipeline_stage_id', '=', 'lead_pipeline_stages.id')
-                ->where("title", 'like', "%$term%")
+                ->where("persons.name", 'like', "%$term%")
                 ->where("leads.lead_pipeline_id", $pipelineId)
                 ->where("leads.lead_pipeline_stage_id", $pipelineStageId)
                 ->when($createdAtRange, function($query) use ($createdAtRange) {
