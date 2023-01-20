@@ -12,7 +12,7 @@
         <div class="page-header">
 
             {{ Breadcrumbs::render('contacts.organizations.edit', $organization) }}
-            
+
             <div class="page-title">
                 <h1>{{ __('admin::app.contacts.organizations.edit-title') }}</h1>
             </div>
@@ -37,18 +37,18 @@
 
                             {!! view_render_event('admin.contacts.organizations.edit.form_buttons.after', ['organization' => $organization]) !!}
                         </div>
-        
+
                         <div class="panel-body">
                             {!! view_render_event('admin.contacts.organizations.edit.form_controls.before', ['organization' => $organization]) !!}
 
                             @csrf()
-                            
+
                             <input name="_method" type="hidden" value="PUT">
-                
+
                             @include('admin::common.custom-attributes.edit', [
                                 'customAttributes' => app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
                                     'entity_type' => 'organizations',
-                                ]),
+                                ])->sortBy('sort_order'),
                                 'entity'           => $organization,
                             ])
 

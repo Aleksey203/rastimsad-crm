@@ -21,6 +21,11 @@ class Organization extends Model implements OrganizationContract
      */
     protected $fillable = [
         'name',
+        'vk',
+        'site',
+        'instagram',
+        'avito',
+        'ok',
         'address',
     ];
 }

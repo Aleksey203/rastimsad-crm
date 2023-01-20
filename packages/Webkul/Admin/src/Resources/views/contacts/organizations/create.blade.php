@@ -12,7 +12,7 @@
         <div class="page-header">
 
             {{ Breadcrumbs::render('contacts.organizations.create') }}
-            
+
             <div class="page-title">
                 <h1>{{ __('admin::app.contacts.organizations.create-title') }}</h1>
             </div>
@@ -37,16 +37,16 @@
 
                             {!! view_render_event('admin.contacts.organizations.create.form_buttons.after') !!}
                         </div>
-        
+
                         <div class="panel-body">
                             {!! view_render_event('admin.contacts.organizations.create.form_controls.before') !!}
 
                             @csrf()
-                
+
                             @include('admin::common.custom-attributes.edit', [
                                 'customAttributes' => app('Webkul\Attribute\Repositories\AttributeRepository')->findWhere([
                                     'entity_type' => 'organizations',
-                                ]),
+                                ])->sortBy('sort_order'),
                             ])
 
                             {!! view_render_event('admin.contacts.organizations.edit.form_controls.after') !!}

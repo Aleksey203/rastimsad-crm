@@ -38,7 +38,12 @@ class OrganizationDataGrid extends DataGrid
             ->addSelect(
                 'organizations.id',
                 'organizations.name',
-                'organizations.address',
+                'organizations.name as name_clone',
+                'organizations.vk',
+                'organizations.site',
+                'organizations.instagram',
+                'organizations.avito',
+                'organizations.ok',
                 'organizations.created_at'
             );
 
@@ -54,37 +59,60 @@ class OrganizationDataGrid extends DataGrid
      */
     public function addColumns()
     {
-        $this->addColumn([
+        /*$this->addColumn([
             'index'    => 'id',
             'label'    => trans('admin::app.datagrid.id'),
             'type'     => 'string',
             'sortable' => true,
-        ]);
+        ]);*/
 
         $this->addColumn([
             'index'    => 'name',
-            'label'    => trans('admin::app.datagrid.name'),
+            'label'    => 'Организация',
             'type'     => 'string',
             'sortable' => true,
+            'closure'  => function ($row) {
+                $route = route('admin.contacts.organizations.edit', $row->id);
+                return "<a href='" . $route . "'>" . $row->name . "</a>";
+            },
+        ]);
+
+        $this->addColumn([
+            'index'            => 'vk',
+            'label'            => 'VK',
+            'type'             => 'string',
+            'sortable'         => false,
+            'closure'  => function ($row) {
+                return "<a href='" . $row->vk . "' target='_blank'>" . $row->vk . "</a>";
+            },
+        ]);
+        $this->addColumn([
+            'index'            => 'site',
+            'label'            => 'Сайт',
+            'type'             => 'string',
+            'sortable'         => false,
+            'closure'  => function ($row) {
+                return "<a href='" . $row->site . "' target='_blank'>" . $row->site . "</a>";
+            },
         ]);
 
         $this->addColumn([
             'index'      => 'persons_count',
-            'label'      => trans('admin::app.datagrid.persons_count'),
+            'label'      => 'Контакт',
             'type'       => 'string',
             'searchable' => false,
             'sortable'   => false,
             'filterable' => false,
             'closure'    => function ($row) {
-                $personsCount = $this->personRepository->findWhere(['organization_id' => $row->id])->count();
+                $personFirst = $this->personRepository->findWhere(['organization_id' => $row->id])->first();
 
-                $route = urldecode(route('admin.contacts.persons.index', ['organization[in]' => $row->id]));
+                $route = urldecode(route('admin.contacts.persons.index', ['organization[in]' => $row->name_clone]));
 
-                return "<a href='" . $route . "'>" . $personsCount . "</a>";
+                return "<a href='" . $route . "'>" . $personFirst->name . "</a>";
             },
         ]);
 
-        $this->addColumn([
+        /*$this->addColumn([
             'index'    => 'created_at',
             'label'    => trans('admin::app.datagrid.created_at'),
             'type'     => 'date_range',
@@ -92,7 +120,7 @@ class OrganizationDataGrid extends DataGrid
             'closure'  => function ($row) {
                 return core()->formatDate($row->created_at);
             },
-        ]);
+        ]);*/
     }
 
     /**

@@ -75,6 +75,10 @@ class PersonDataGrid extends DataGrid
             'label'    => 'Имя',
             'type'     => 'string',
             'sortable' => true,
+            'closure'  => function ($row) {
+                $route = route('admin.contacts.persons.edit', $row->id);
+                return "<a href='" . $route . "'>" . $row->person_name . "</a>";
+            },
         ]);
 
         /*$this->addColumn([
@@ -132,7 +136,8 @@ class PersonDataGrid extends DataGrid
             //'dropdown_options' => $this->getOrganizationDropdownOptions(),
             'sortable'         => false,
             'closure'  => function ($row) {
-                return "<a href='" . route('admin.contacts.organizations.edit', $row->organization_id) . "' target='_blank'>" . $row->organization . "</a>";
+                $route = urldecode(route('admin.contacts.organizations.index', ['name[in]' => $row->organization]));
+                return "<a href='" . $route . "'>" . $row->organization . "</a>";
             },
         ]);
     }
@@ -155,7 +160,10 @@ class PersonDataGrid extends DataGrid
             'title'        => trans('ui::app.datagrid.delete'),
             'method'       => 'DELETE',
             'route'        => 'admin.contacts.persons.delete',
-            'confirm_text' => trans('ui::app.datagrid.massaction.delete', ['resource' => trans('admin::app.contacts.persons.person')]),
+            'confirm_text' => trans(
+                'ui::app.datagrid.massaction.delete',
+                ['resource' => trans('admin::app.contacts.persons.person')]
+            ),
             'icon'         => 'trash-icon',
         ]);
     }
