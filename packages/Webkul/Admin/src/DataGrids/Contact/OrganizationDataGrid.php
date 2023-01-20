@@ -105,6 +105,9 @@ class OrganizationDataGrid extends DataGrid
             'filterable' => false,
             'closure'    => function ($row) {
                 $personFirst = $this->personRepository->findWhere(['organization_id' => $row->id])->first();
+                if (empty($personFirst)) {
+                    return '---';
+                }
 
                 $route = urldecode(route('admin.contacts.persons.index', ['organization[in]' => $row->name_clone]));
 
