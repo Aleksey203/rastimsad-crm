@@ -264,7 +264,7 @@ class LeadController extends Controller
 
             $data['lead_pipeline_stage_id'] = $stage->id;
         }
-        if (is_null($data['title'])) {
+        if (isset($data['title']) && is_null($data['title'])) {
             $data['title'] = '';
         }
 
