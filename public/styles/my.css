@@ -51,3 +51,6 @@
     width: calc(100% - 90px);
     overflow: hidden;
 }
+.email-blue-icon {
+    background-image: url(../vendor/webkul/admin/assets/images/email-blue-icon.svg);
+}

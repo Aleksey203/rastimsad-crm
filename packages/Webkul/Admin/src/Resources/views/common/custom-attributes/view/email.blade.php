@@ -1,10 +1,14 @@
 @if (is_array($value))
 
-    @foreach ($value as $item)
+    @foreach ($value as $key => $item)
         <span class="multi-value">
-            {{ $item['value'] }}
-
-<!--            <span>{{--{{ ' (' . $item['label'] . ')'}}--}}</span>-->
+            <span id="js-emaillink<?=$key?>">{{ $item['value'] }}</span>
+             &nbsp;
+            <i
+                class="icon email-blue-icon btn-clipboard"
+                data-clipboard-target="#js-emaillink<?=$key?>"
+                style="cursor:pointer"
+            ></i>
         </span>
     @endforeach
 
