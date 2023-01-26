@@ -36,5 +36,11 @@
     height: calc(100% + 10px);
 }
 .kanban .search-filter {
-    visibility: hidden;
+    display: none;
+}
+.kanban .filter-right {
+    margin-top: -50px;
+}
+.viewport-height {
+    height: calc(100vh - 200px);
 }

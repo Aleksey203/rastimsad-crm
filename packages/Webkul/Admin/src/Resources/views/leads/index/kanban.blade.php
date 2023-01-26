@@ -85,12 +85,6 @@
                     @{{ stage }}
                     <span class="float-right">@{{ totalCounts[stage] }}</span>
                 </h2>
-
-                @if (bouncer()->hasPermission('leads.create'))
-                    <a :href="'{{ route('admin.leads.create') }}' + '?stage_id=' + stages[index].id">
-                        {{ __('admin::app.leads.create-title') }}
-                    </a>
-                @endif
             </div>
 
             <div
@@ -113,9 +107,6 @@
                         <a :href="`${personIndexUrl}?id[eq]=${lead.person_id}`">
                             @{{ lead.person_name }}
                         </a>
-                </div>
-
-                <div class="lead-cost">
                     <i class="icon dollar-circle-icon"></i>@{{ lead.lead_value }}
                 </div>
             </div>

@@ -109,7 +109,7 @@ class LeadController extends Controller
                 if ($stageId = request('pipeline_stage_id')) {
                     $query = $this->leadRepository->getLeadsQuery($pipeline->id, $stageId, request('search') ?? '', $createdAt);
 
-                    $paginator = $query->paginate(10);
+                    $paginator = $query->paginate(100);
 
                     $data[$stageId] = [
                         'leads' => [],
@@ -118,7 +118,10 @@ class LeadController extends Controller
                             'last' => $last = $paginator->lastPage(),
                             'next' => $current < $last ? $current + 1 : null,
                         ],
-                        'total' => core()->formatBasePrice($query->getModel()->paginate(request('page') ? request('page') * 10 : 10, ['lead_value'], 'page', 1)->sum('lead_value')),
+                        'total' => core()->formatBasePrice($query->getModel()->paginate(
+                            request('page') ? request('page') * 100 : 100, ['lead_value'], 'page', 1)
+                            ->count('lead_value')
+                        ),
                     ];
 
                     foreach ($paginator as $lead) {
@@ -130,7 +133,7 @@ class LeadController extends Controller
                     foreach ($pipeline->stages as $stage) {
                         $query = $this->leadRepository->getLeadsQuery($pipeline->id, $stage->id, request('search') ?? '', $createdAt);
 
-                        $paginator = $query->paginate(10);
+                        $paginator = $query->paginate(100);
 
                         $data[$stage->id] = [
                             'leads' => [],
@@ -139,7 +142,7 @@ class LeadController extends Controller
                                 'last' => $last = $paginator->lastPage(),
                                 'next' => $current < $last ? $current + 1 : null,
                             ],
-                            'total' => (int)($query->paginate(10)->sum('lead_value')),
+                            'total' => (int)($query->paginate(100)->count('lead_value')),
                         ];
 
                         foreach ($paginator as $lead) {
