@@ -2,9 +2,9 @@
 
     @foreach ($value as $item)
         <span class="multi-value">
-            {{ $item['value'] }}
+            <a href="https://t.me/+{{ $item['value'] }}">{{ $item['value'] }}</a>
 
-<!--            <span>{{--{{ ' (' . $item['label'] . ')'}}--}}</span>-->
+<!--<span>{{--{{ ' (' . $item['label'] . ')'}}--}}</span>-->
         </span>
     @endforeach
 

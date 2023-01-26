@@ -104,7 +104,7 @@
 
                 <div class="lead-person">
                     <i class="icon avatar-dark-icon"></i>
-                        <a :href="`${personIndexUrl}?id[eq]=${lead.person_id}`">
+                        <a :href="'{{ route('admin.leads.view') }}/' + lead.id">
                             @{{ lead.person_name }}
                         </a>
                     <i class="icon dollar-circle-icon"></i>@{{ lead.lead_value }}

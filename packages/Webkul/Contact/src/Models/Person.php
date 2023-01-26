@@ -70,4 +70,14 @@ class Person extends Model implements PersonContract
     {
         return PersonFactory::new ();
     }
+
+    public function hasEmail(): bool
+    {
+        return isset($this->emails[0]['value']) && $this->emails[0]['value'];
+    }
+
+    public function hasPhone(): bool
+    {
+        return isset($this->contact_numbers[0]['value']) && $this->contact_numbers[0]['value'];
+    }
 }

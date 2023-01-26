@@ -44,3 +44,10 @@
 .viewport-height {
     height: calc(100vh - 200px);
 }
+.lead-content-left .custom-attribute-view .attribute-value-row .label {
+    width: 90px;
+}
+.lead-content-left .custom-attribute-view .attribute-value-row .value {
+    width: calc(100% - 90px);
+    overflow: hidden;
+}
