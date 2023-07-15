@@ -54,3 +54,10 @@
 .email-blue-icon {
     background-image: url(../vendor/webkul/admin/assets/images/email-blue-icon.svg);
 }
+
+.grid-container>.tabs-container>.pill.tabs-left-container>.tabs>ul {
+    white-space: nowrap;
+    overflow-x: scroll;
+    max-width: 1260px;
+    padding-bottom: 10px;
+}

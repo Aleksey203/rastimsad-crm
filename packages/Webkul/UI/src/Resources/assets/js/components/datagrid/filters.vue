@@ -787,7 +787,7 @@ export default {
                         });
                 } else {
                     this.$root.pageLoaded = true;
-                    
+
                     this.toggleButtonDisable(false);
 
                     EventBus.$emit("onFormError");

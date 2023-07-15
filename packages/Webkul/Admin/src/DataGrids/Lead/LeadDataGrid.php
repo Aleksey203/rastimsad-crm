@@ -114,6 +114,7 @@ class LeadDataGrid extends DataGrid
                 'users.name as sales_person',
                 'persons.id as person_id',
                 'persons.name as person_name',
+                'persons.contact_numbers as phones',
                 'organizations.name as organization_name',
                 'tags.name as tag_name',
                 'lead_pipelines.rotten_days as pipeline_rotten_days',
@@ -239,9 +240,22 @@ class LeadDataGrid extends DataGrid
         ]);
 
         $this->addColumn([
+            'index'    => 'phone',
+            'label'    => 'Телефон',
+            'type'     => 'string',
+            'searchable' => false,
+            'sortable'   => false,
+            'filterable' => false,
+            'closure'  => function ($row) {
+                $phones = json_decode($row->phones);
+                return $phones[0]->value ?? '';
+            },
+        ]);
+
+        $this->addColumn([
             'index'      => 'stage',
             'label'      => trans('admin::app.datagrid.stage'),
-            'type'       => 'string',
+            'type'       => 'hidden',
             'searchable' => false,
             'sortable'   => false,
             'filterable' => false,
